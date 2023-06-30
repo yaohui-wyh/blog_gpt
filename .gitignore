@@ -1,0 +1,9 @@
+.idea/
+.vscode/
+venv/
+
+blog/
+*.faiss/
+
+*.swa
+*.swp

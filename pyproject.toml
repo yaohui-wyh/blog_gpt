@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "blog_gpt"
+version = "0.1.0"
+description = "An AI assistant for automated metadata generation in markdown blogs, also providing content understanding, summarization, etc."
+authors = ["Yaohui Wang <wangyaohuicn@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "blog_gpt" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
