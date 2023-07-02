@@ -20,5 +20,27 @@ Run blog_gpt.py to generate metadata for a blog post:
 
 ```shell
 cd blog-gpt
-python blog_gpt.py -f <path-to-markdown>
+
+export OPENAI_API_KEY=<openai-key>
+
+# Generate content summarization & keywords
+python blog_gpt.py -f <path-to-markdown-file>
+
+# Q&A about content
+python blog_gpt.py -f <path-to-markdown-file> -q <question>
+```
+
+### Usage Example
+
+Summarize and answer questions about the BlogGPT README.md:
+
+```plain
+➜ python blog_gpt.py -f ../README.md | jq
+{
+  "summary": "BlogGPT is an AI assistant that can generate metadata for markdown blogs, as well as provide content understanding and summarization. To use it, clone the repository, install dependencies, and run blog_gpt.py.",
+  "keywords": "AI, metadata, markdown, blog, summarization"
+}
+
+➜ python blog_gpt.py -f ../README.md -q "can blog_gpt generate keywords"
+Yes, blog_gpt can generate keywords.
 ```

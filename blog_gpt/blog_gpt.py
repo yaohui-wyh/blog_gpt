@@ -1,8 +1,8 @@
 import argparse
+import json
 import os
 from dataclasses import dataclass
 from getpass import getpass
-from pprint import pprint
 from typing import List, Any, Optional
 
 from langchain import FAISS, OpenAI, PromptTemplate
@@ -108,23 +108,23 @@ class MarkdownPost:
         :return: JSON output based on the prebuilt prompt template
         """
         map_prompt = PromptTemplate(
-            template="Write a concise summary of the following:\n\n{text}\n\n"
-                     "concise summary with the author's tone in the original language:",
+            template="write a concise summary of the following:\n\n\"{text}\"\n\n"
+                     "CONCISE SUMMARY WITH THE AUTHOR'S TONE IN THE ORIGINAL LANGUAGE:",
             input_variables=["text"],
         )
         # Create an instance of the output parser and configure the response schema
         response_schemas = [
             ResponseSchema(name="summary",
-                           description="provide a concise summary in the original language "
-                                       "with no more than 3 sentences and use the author's tone."),
+                           description="PROVIDE A CONCISE SUMMARY IN THE ORIGINAL LANGUAGE "
+                                       "WITH NO MORE THAN 3 SENTENCES AND USE THE AUTHOR'S TONE"),
             ResponseSchema(name="keywords",
-                           description="5 keywords related to the text"),
+                           description="NO MORE THAN 5 KEYWORDS RELATED TO THE TEXT"),
         ]
         output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
 
         # Define the PromptTemplate and set the output parser
         reduce_prompt = PromptTemplate(
-            template="Write a concise summary of the following:\n\n{text}\n\n{instructions}",
+            template="Write a concise summary of the following:\n\n\"{text}\"\n\n{instructions}",
             input_variables=["text"],
             partial_variables={"instructions": output_parser.get_format_instructions()},
             output_parser=output_parser,
@@ -137,11 +137,19 @@ class MarkdownPost:
             combine_prompt=reduce_prompt
         )
         output = chain.run({"input_documents": self.splits})
+
         try:
             return output_parser.parse(output)
         except OutputParserException:
-            # In case LLM gives invalid JSON output, just return the raw content
-            return output
+            # In case LLM gives invalid JSON output
+            # Most failed cases are missing a comma between the "summary" and "keywords" fields
+            try:
+                # Make a workaround and try once again
+                return output_parser.parse(output.replace('"\n\t"keywords"', '",\n\t"keywords"'))
+            except OutputParserException as ex:
+                # If all attempts to parse the output fail, just return the raw content
+                print(f'[ERROR] {ex}')
+                return output
 
 
 if __name__ == '__main__':
@@ -149,7 +157,7 @@ if __name__ == '__main__':
     c.parse_from_command_line()
     post = MarkdownPost(c)
     post.build_embedding()
-    if c.query is None:
-        pprint(post.summarize())
+    if c.query is None or c.query == "":
+        print(json.dumps(post.summarize()))
     else:
-        pprint(post.question_answer(c.query))
+        print(post.question_answer(c.query).strip())
