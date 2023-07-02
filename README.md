@@ -2,6 +2,8 @@
 
 An AI assistant for automated metadata generation in markdown blogs (e.g. Jekyll/Hexo), also providing content understanding, summarization, etc.
 
+> Developer's note: [A Hands-on Journey to a working LangChain LLM Application](https://wyh.life/article/2023/07/02/llm-app-development)
+
 ## 💻 Running Locally
 
 ```shell
