@@ -1,0 +1,5 @@
+tasks:
+  - name: Install dependencies
+    before: cd ./blog_gpt
+    init: pip install poetry
+    command: poetry install && poetry shell

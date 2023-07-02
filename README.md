@@ -20,7 +20,6 @@ Run blog_gpt.py to generate metadata for a blog post:
 
 ```shell
 cd blog-gpt
-
 export OPENAI_API_KEY=<openai-key>
 
 # Generate content summarization & keywords
@@ -31,6 +30,8 @@ python blog_gpt.py -f <path-to-markdown-file> -q <question>
 ```
 
 ### Usage Example
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer/)
 
 Summarize and answer questions about the BlogGPT README.md:
 
