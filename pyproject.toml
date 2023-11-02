@@ -9,7 +9,7 @@ packages = [{ include = "blog_gpt" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-langchain = "^0.0.312"
+langchain = "^0.0.325"
 openai = "^0.27.8"
 tiktoken = "^0.4.0"
 faiss-cpu = "^1.7.4"
